@@ -1,0 +1,53 @@
+Review 1) [Unnecessary Repeated Conditions] : The code has a high cognitive complexity. Please refactor like below
+Below code is having 2 Congitive Complexity.
+
+public bool IsShopOpen(string day)
+{
+    var openDays = new HashSet<string>(StringComparer.OrdinalIgnoreCase) 
+    { 
+        "Friday", "Saturday", "Sunday" 
+    };
+
+    return !string.IsNullOrEmpty(day) && openDays.Contains(day);
+}
+
+
+Review 3) [Deep Nesting and Recursive Calls] : The code has a high cognitive complexity. Please refactor like below
+Please check for the exception case immediately as the method begins , supports faster fail.
+public long Fibonacci(int n)
+{
+    if (n >= 50)
+    {
+        throw new System.Exception("Not supported");
+    }
+    if (n <= 1) return n;  
+ 
+    return Fibonacci(n - 1) + Fibonacci(n - 2);
+}
+
+review-4)  Rename li to meaningfullname like cities . Remove .Count() in for Loop.li Defined Too Early, Leading to Readability Issues , Use Foreach for  better readibility.
+var cities = new[] { "Austin", "New York", "San Francisco" };
+for (var i = 0; i < cities.Length; i++)
+{
+    DoStuff();
+    DoSomeOtherStuff();
+    var cityName = cities[i]; 
+    Dispatch(cityName);
+}
+
+Review 5:[Magic number] Remove hard code value and move it to const int AdminUserRole = 8. Remove the redundant comment
+
+Review 6)
+6.1 Prefixing every property with Car is redundant inside the Car class. Instead of CarMake, CarModel, and CarColor, use Make, Model, and Color.
+6.2 If Make and Model don’t change after object creation, mark them as readonly.
+
+Review 7)
+You can use the null-coalescing operator (??) instead, which is more idiomatic and readable.
+Moving the default value to a constant improves maintainability.
+
+private const string DefaultBreweryName = "Hipster Brew Co.";
+public void CreateMicrobrewery(string name = null)
+{
+    var breweryName = name ?? DefaultBreweryName;
+}
+
