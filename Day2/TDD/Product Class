@@ -1,0 +1,26 @@
+
+
+namespace TemplateEngine;
+
+public class TemplateEngine
+{
+    private Dictionary<string, string> myStorage = new Dictionary<string, string>();
+
+    public string Template { get; set; }
+
+    public void AddVariable(string name, string value)
+    {
+        myStorage[name] = value;
+    }
+
+    public string Evaluate()
+    {
+        string result = Template;
+        foreach (var variable in myStorage)
+        {
+            result = result.Replace($"${{{variable.Key}}}", variable.Value);
+        }
+
+        return result;
+    }
+}
