@@ -1,0 +1,49 @@
+namespace TemplateEngine.Tests;
+
+public class TemplateEngineTests
+{
+    [SetUp]
+    public void Setup()
+    {
+    }
+
+    [TestCase("Souvik")]
+    [TestCase("Swathi")]
+    public void ShouldReturnOneVariableValue(string value)
+    {
+        TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.Template = "Hello ${name}";
+        templateEngine.AddVariable("name", value);
+        var result = templateEngine.Evaluate();
+        Assert.That(result, Is.EqualTo("Hello " + value));
+    }
+
+    [TestCase("Souvik", "Ganguly")]
+    [TestCase("Swathi", "Something")]
+    public void ShouldReturnTwoVariableValue(string firstValue, string secondValue)
+    {
+        TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.Template = "Hello ${firstName} ${secondName}";
+        templateEngine.AddVariable("firstName", firstValue);
+        templateEngine.AddVariable("secondName", secondValue);
+        var result = templateEngine.Evaluate();
+        Assert.That(result, Is.EqualTo("Hello " + firstValue + " " + secondValue));
+    }
+
+    [TestCase("Souvik", "Ganguly", "Developer")]
+    [TestCase("Souvik", "Ganguly", "Player")]
+    [TestCase("Swathi", "Something", "Engineer")]
+    public void ShouldReturnThreeVariableValue(string firstValue, string secondValue, string thirdValue)
+    {
+        TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.Template = "Hello ${firstName} ${lastName}, you are a ${role}.";
+        templateEngine.AddVariable("firstName", firstValue);
+        templateEngine.AddVariable("lastName", secondValue);
+        templateEngine.AddVariable("role", thirdValue);
+        var result = templateEngine.Evaluate();
+        Assert.That(result, Is.EqualTo($"Hello {firstValue} {secondValue}, you are a {thirdValue}."));
+    }
+
+
+}
+
