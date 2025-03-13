@@ -1,0 +1,35 @@
+namespace PredictionEngine;
+
+public interface ILanguageModelAlgo {
+    public String predictUsingMonogram(String word);
+
+    public String predictUsingBigram(String word) ;
+}
+
+public class PredictionEngine {
+
+    private ILanguageModelAlgo languageModelAlgo;
+    public PredictionEngine(ILanguageModelAlgo algo)
+    {
+        this.languageModelAlgo = algo;
+    }
+
+    public string predict(string inputPhrase)
+    {
+        string lastWord = GetLastWord(inputPhrase);
+        if (inputPhrase.EndsWith(" "))
+        {
+            return languageModelAlgo.predictUsingBigram(lastWord);
+        }
+        else
+        {
+            return languageModelAlgo.predictUsingMonogram(lastWord);
+        }
+    }
+
+    private static string GetLastWord(string inputPhrase)
+    {
+        string[] words = inputPhrase.Trim().Split(' ');
+        return words[words.Length - 1];
+    }
+}
