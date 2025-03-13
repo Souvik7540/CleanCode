@@ -1,0 +1,37 @@
+using Moq;
+
+namespace PredictionEngine.Tests;
+
+public class PredictionEngineTests
+{
+
+    [TestCase("How are you","you")]
+    [TestCase("How are you doing","doing")]
+    [TestCase("","")]
+
+    public void ShouldWorkWithPartialWord(string inputPhrase, string verifyWith)
+    {
+        var mock = new Mock<ILanguageModelAlgo>();
+        PredictionEngine predictionEngine = new PredictionEngine(mock.Object);
+
+        predictionEngine.predict(inputPhrase);
+        mock.Verify(p => p.predictUsingMonogram(verifyWith), Times.Once());
+
+    }
+
+    [TestCase("How are you ", "you")]
+    [TestCase("Space Test ", "Test")]
+
+    [TestCase(" ", "")]
+
+    public void ShouldWorkWithSpace(string inputPhrase, string verifyWith)
+    {
+        var mock = new Mock<ILanguageModelAlgo>();
+        PredictionEngine predictionEngine = new PredictionEngine(mock.Object);
+
+        predictionEngine.predict(inputPhrase);
+        mock.Verify(p => p.predictUsingBigram(verifyWith), Times.Once());
+
+    }
+
+}
