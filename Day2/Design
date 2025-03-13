@@ -1,0 +1,113 @@
+
+public interface IProduct
+{
+    int ProductTypeId { get; }
+    string Name { get; }
+}
+
+public class Product : IProduct
+{
+    public int ProductTypeId { get; private set; }
+    public string Name { get; private set; }
+
+    public Product(int productTypeId, string name)
+    {
+        ProductTypeId = productTypeId;
+        Name = name;
+    }
+}
+
+public interface IQualityCalculator
+{
+    int ComputeQuality(int productTypeId);
+}
+
+public class QualityCalculator : IQualityCalculator
+{
+
+}
+
+
+public interface IExternalFactor
+{
+    decimal ApplyFactor(decimal baseCost);
+}
+
+
+public class DemandFactor : IExternalFactor
+{
+
+}
+
+
+public class MarketFluctuations : IExternalFactor
+{
+
+}
+
+public interface IRuleEngine
+{
+    void UpdateRules(List<IExternalFactor> newRules);
+    List<IExternalFactor> GetCurrentRules();
+}
+
+public class RuleEngine : IRuleEngine
+{
+
+}
+
+public interface ICostCalculator
+{
+    decimal ComputeCost(IProduct product);
+}
+
+public class CostCalculator : ICostCalculator
+{
+    private readonly List<IExternalFactor> _externalFactors;
+
+    public CostCalculator(List<IExternalFactor> externalFactors)
+    {
+        _externalFactors = externalFactors;
+    }
+
+    public decimal ComputeCost(IProduct product)
+    {
+        decimal baseCost = GetBaseCostForProductType(product.ProductTypeId);
+
+        foreach (var factor in _externalFactors)
+        {
+            baseCost = factor.ApplyFactor(baseCost);
+        }
+
+        return baseCost;
+    }
+
+}
+
+public class DynamicPriceComputationService
+{
+    private readonly IQualityCalculator myQualityCalculator;
+    private readonly ICostCalculator myCostCalculator;
+    private readonly IRuleEngine myRuleEngine;
+
+    public DynamicPriceComputationService(
+        IQualityCalculator qualityCalculator,
+        ICostCalculator costCalculator,
+        IRuleEngine ruleEngine)
+    {
+        myQualityCalculator = qualityCalculator;
+        myCostCalculator = costCalculator;
+        myRuleEngine = ruleEngine;
+    }
+
+    public ComputePrice(IProduct product)
+    {
+        int quality = myQualityCalculator.ComputeQuality(product.ProductTypeId);
+        decimal cost = myCostCalculator.ComputeCost(product);
+        decimal rules = myRuleEngine.GetCurrentRules();
+
+        return quality*cost*rules;
+    }
+
+
+}
